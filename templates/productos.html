@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos - Delicia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+
+    <nav class="bg-white shadow-md px-4 py-3 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-green-700">🥐Bodegua Delicia</h1>
+        <div class="space-x-4">
+            {% if user.is_authenticated %}
+                <span class="text-gray-700">Hola, {{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cerrar sesión</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Iniciar sesión</a>
+                <a href="{% url 'registro' %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Registrarse</a>
+            {% endif %}
+        </div>
+    </nav>
+
+
+    <div class="container mx-auto px-4 py-6">
+        <h2 class="text-3xl font-bold mb-6 text-center">🛒 Productos disponibles</h2>
+
+        <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for producto in productos %}
+    <li class="bg-white shadow-md rounded-xl p-4">
+        {% if producto.imagen %}
+        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="w-full h-48 object-cover rounded mb-4">
+        {% else %}
+        <div class="w-full h-48 bg-gray-200 flex items-center justify-center rounded mb-4">
+            <span class="text-gray-500">Sin imagen</span>
+        </div>
+        {% endif %}
+        <h3 class="text-xl font-semibold">{{ producto.nombre }}</h3>
+        <p class="text-gray-600 mb-3">Precio: <strong>S/ {{ producto.precio }}</strong></p>
+        <a href="{% url 'agregar_al_carrito' producto.id %}" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+            Agregar al carrito
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+
+        <div class="mt-8 text-center">
+            <a href="{% url 'resumen' %}" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+                Ver carrito
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
